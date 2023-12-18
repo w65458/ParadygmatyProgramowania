@@ -8,6 +8,7 @@ import org.jpl7.Query;
 import org.jpl7.Term;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -56,7 +57,7 @@ public class PrologQueryExecutor {
         return input.replace("'", "\\'");
     }
 
-    public List<Map<String, Term>> executeQuery(String queryString) {
+    public List<String> executeQuery(String queryString) {
         Query query = new Query(queryString);
         List<Map<String, Term>> results = new ArrayList<>();
 
@@ -65,6 +66,11 @@ public class PrologQueryExecutor {
             results.add(solution);
         }
 
-        return results;
+        Term[] recommendedBooksTerms = results.get(0).get("Books").listToTermArray();
+
+        return Arrays.stream(recommendedBooksTerms)
+                .map(Term::toString)
+                .map(title -> title.replace("'", ""))
+                .toList();
     }
 }

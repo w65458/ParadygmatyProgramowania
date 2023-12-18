@@ -21,14 +21,7 @@ public class BookService {
 
     public List<String> getRecommendationsForUser(String username) {
         String query = String.format("all_recommendations(%s, Books).", username);
-        Map<String, Term> solution = prologQueryExecutor.executeQuery(query).get(0);
-
-        Term[] recommendedBooksTerms = solution.get("Books").listToTermArray();
-
-        return Arrays.stream(recommendedBooksTerms)
-                .map(Term::toString)
-                .map(title -> title.replace("'", ""))
-                .toList();
+        return prologQueryExecutor.executeQuery(query);
     }
 
 }
